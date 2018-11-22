@@ -1,0 +1,172 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #background {
+      height: 100vh;
+      width: auto;
+    }
+
+    #background img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: auto;
+    }
+
+    #boat {
+      width: 100px;
+      height: auto;
+      transform: scaleX(-1);
+      position: absolute;
+      left: 10%;
+    }
+
+    .islands {
+      position: absolute;
+      left: 50%;
+      top: 10%;
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+      min-width: 200px;
+    }
+
+    .island {
+      flex: 1;
+      margin: 10%;
+      text-align: center;
+      position: relative;
+    }
+
+    .island-base {
+      position: absolute;
+      width: 50%;
+      height: auto;
+      margin: 0 auto;
+      bottom: 0;
+      left: 65px;
+    }
+
+    .character {
+      position: absolute;
+      width: 50px;
+      height: auto;
+      bottom: 20px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <div id="background">
+      <img src="assets/bg.png" class="background-bottom" style="left: 0">
+      <img src="assets/bg.png" class="background-bottom" style="left: 830px">
+      <img src="assets/bg.png" class="background-bottom" style="left: 1660px">
+    </div>
+
+    <div class="islands" position="left">
+      <div class="island" id="island1">
+        <img src="assets/character_1.png" class="character" id="character1">
+        <img src="assets/island.png" alt="" class="island-base">
+      </div>
+
+      <div class="island" id="island2">
+        <img src="assets/character_5.png" class="character" id="character5">
+        <img src="assets/island.png" alt="" class="island-base">
+      </div>
+
+      <div class="island" id="island3">
+        <img src="assets/character_5.png" class="character" id="character5">
+        <img src="assets/island.png" alt="" class="island-base">
+      </div>
+    </div>
+
+
+    <img src="assets/boat.png" id="boat">
+  </div>
+
+  <script>
+    var boat = document.getElementById('boat')
+    var character1 = document.getElementById('character1')
+    var character5 = document.getElementById('character5')
+    var backgrounds = Array.from(document.getElementsByClassName('background-bottom'))
+
+    boat.style.top = 300
+
+    var speed = 1
+
+    var movingDirection
+
+    var keysDown = {}
+
+    function keyDownHandler(event) {
+      switch (event.keyCode) {
+        case 39: // right
+          return
+
+        case 37: // left
+          return
+
+        case 40: // up
+          keysDown['up'] = true
+          movingDirection = +1
+          return
+
+        case 38: // down
+          keysDown['down'] = true
+          movingDirection = -1
+          return
+      }
+    }
+
+    function keyUpHandler(event) {
+      switch (event.keyCode) {
+        case 39: // right
+          return
+
+        case 37: // left
+          return
+
+        case 40: // up
+          keysDown['up'] = false
+          return
+
+        case 38: // down
+          keysDown['down'] = false
+          return
+      }
+    }
+
+    function gameLoop() {
+      if (keysDown.up || keysDown.down) {
+        var top = parseInt(boat.style.top)
+        boat.style.top = top + (movingDirection * speed)
+      }
+
+      backgrounds.forEach(background => {
+        var left = parseFloat(background.style.left) - 1
+        background.style.left = left
+        if (left < -background.width) {
+          background.style.left = left + (background.width * backgrounds.length)
+        }
+      })
+    }
+
+    setInterval(gameLoop, 1000 / 60);
+
+    document.addEventListener('keydown', keyDownHandler, false);
+    document.addEventListener('keyup', keyUpHandler, false);
+
+  </script>
+
+</body>
+</html>
